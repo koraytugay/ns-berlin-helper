@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RPRXCMNKLB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-RPRXCMNKLB');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Station: Berlin - Deck Companion</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>Next Station: Berlin</h1>
+            <p class="subtitle">Base Game Destination Deck Helper</p>
+        </header>
+
+        <!-- Round & Line Info -->
+        <section class="status-panel">
+            <div class="round-badge" id="roundBadge">
+                <span class="badge-label">ROUND</span>
+                <span class="badge-value" id="roundNumber">1 / 4</span>
+            </div>
+
+            <div class="line-badge" id="lineBadge">
+                <span class="line-dot" id="lineDot"></span>
+                <span class="line-name" id="lineName">Pink Line</span>
+            </div>
+        </section>
+
+        <!-- Underground Tracker -->
+        <section class="tracker-panel">
+            <div class="tracker-header">
+                <span class="tracker-title">Underground Cards (Pink Frame)</span>
+                <span class="tracker-count" id="trackerCount">0 / 5</span>
+            </div>
+            <div class="tracker-slots" id="trackerSlots">
+                <div class="slot" id="slot-1">1</div>
+                <div class="slot" id="slot-2">2</div>
+                <div class="slot" id="slot-3">3</div>
+                <div class="slot" id="slot-4">4</div>
+                <div class="slot" id="slot-5">5</div>
+            </div>
+        </section>
+
+        <!-- Main Card Display Section -->
+        <main class="card-section">
+            <div class="card-display-wrapper">
+                <!-- Main Flipped Card -->
+                <div class="card-card" id="cardDisplay">
+                    <div class="card-inner">
+                        <div class="card-header-type" id="cardTypeLabel">Press Flip Card to Start</div>
+                        <div class="card-symbol-container" id="cardSymbolContainer">
+                            <div class="placeholder-icon">🎴</div>
+                        </div>
+                        <div class="card-footer-name" id="cardNameLabel">Ready for Round 1</div>
+                    </div>
+                </div>
+
+                <!-- Secondary Flipped Card for Switch Action if Flipped -->
+                <div class="card-card secondary-card hidden" id="secondaryCardDisplay">
+                    <div class="card-inner">
+                        <div class="card-header-type" id="secondaryCardTypeLabel">Next Station</div>
+                        <div class="card-symbol-container" id="secondaryCardSymbolContainer"></div>
+                        <div class="card-footer-name" id="secondaryCardNameLabel"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banner Messages (Switch alert, Round Complete, Game Over) -->
+            <div class="alert-banner hidden" id="alertBanner"></div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button id="primaryBtn" class="btn btn-primary">Flip Card</button>
+                <button id="restartBtn" class="btn btn-secondary">New Game</button>
+            </div>
+            <p class="keyboard-hint">Press <kbd>Space</kbd> or <kbd>Enter</kbd> to flip card</p>
+        </main>
+
+        <!-- Round History -->
+        <section class="history-panel">
+            <h3>Current Round Cards (<span id="cardsDrawnCount">0</span>/11)</h3>
+            <div class="history-cards" id="historyCards">
+                <span class="empty-history">No cards revealed yet in this round.</span>
+            </div>
+        </section>
+
+        <!-- Completed Rounds Summary -->
+        <section class="completed-rounds-panel hidden" id="completedRoundsPanel">
+            <h3>Completed Rounds</h3>
+            <div class="completed-rounds-container" id="completedRoundsContainer"></div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Next Station: Berlin Deck Companion • Base Game Rules</p>
+            <p class="rules-note">Deck composition: 5 Underground (Pink Frame) + 6 Street (Blue Frame) = 11 Cards total. Round ends immediately after the 5th Underground card is drawn.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
