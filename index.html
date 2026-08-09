@@ -12,7 +12,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Next Station: Berlin - Destination Deck Companion</title>
+    <title>Next Station: Berlin - Deck Companion</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -20,8 +20,9 @@
         <!-- Header -->
         <header class="app-header">
             <div class="logo-row">
-                <span class="berlin-bear-icon">🐻</span>
+                <span class="side-icon bear-side">🐻</span>
                 <h1>Next Station: Berlin</h1>
+                <span class="side-icon crown-side">👑</span>
             </div>
             <p class="subtitle">Base Game Destination Deck Companion</p>
         </header>
@@ -39,18 +40,38 @@
             </div>
         </section>
 
-        <!-- Underground Tracker Panel -->
+        <!-- Dual Tracker Panel: Bear vs Crown -->
         <section class="tracker-panel">
-            <div class="tracker-header">
-                <span class="tracker-title">Underground Cards (Pink Frame)</span>
-                <span class="tracker-count" id="trackerCount">0 / 5</span>
+            <div class="tracker-subtitle">Round ends when either Bear 🐻 or Crown 👑 reaches 5!</div>
+            
+            <!-- Bear Tracker (Orange) -->
+            <div class="tracker-group bear-group">
+                <div class="tracker-header">
+                    <span class="tracker-title bear-title">🐻 Bear Cards (Orange)</span>
+                    <span class="tracker-count bear-count" id="bearCount">0 / 5</span>
+                </div>
+                <div class="tracker-slots" id="bearSlots">
+                    <div class="slot slot-bear" id="bear-slot-1"><span class="slot-num">1</span></div>
+                    <div class="slot slot-bear" id="bear-slot-2"><span class="slot-num">2</span></div>
+                    <div class="slot slot-bear" id="bear-slot-3"><span class="slot-num">3</span></div>
+                    <div class="slot slot-bear" id="bear-slot-4"><span class="slot-num">4</span></div>
+                    <div class="slot slot-bear" id="bear-slot-5"><span class="slot-num">5</span></div>
+                </div>
             </div>
-            <div class="tracker-slots" id="trackerSlots">
-                <div class="slot" id="slot-1"><span class="slot-num">1</span></div>
-                <div class="slot" id="slot-2"><span class="slot-num">2</span></div>
-                <div class="slot" id="slot-3"><span class="slot-num">3</span></div>
-                <div class="slot" id="slot-4"><span class="slot-num">4</span></div>
-                <div class="slot" id="slot-5"><span class="slot-num">5</span></div>
+
+            <!-- Crown Tracker (Purple) -->
+            <div class="tracker-group crown-group">
+                <div class="tracker-header">
+                    <span class="tracker-title crown-title">👑 Crown Cards (Purple)</span>
+                    <span class="tracker-count crown-count" id="crownCount">0 / 5</span>
+                </div>
+                <div class="tracker-slots" id="crownSlots">
+                    <div class="slot slot-crown" id="crown-slot-1"><span class="slot-num">1</span></div>
+                    <div class="slot slot-crown" id="crown-slot-2"><span class="slot-num">2</span></div>
+                    <div class="slot slot-crown" id="crown-slot-3"><span class="slot-num">3</span></div>
+                    <div class="slot slot-crown" id="crown-slot-4"><span class="slot-num">4</span></div>
+                    <div class="slot slot-crown" id="crown-slot-5"><span class="slot-num">5</span></div>
+                </div>
             </div>
         </section>
 
@@ -70,7 +91,7 @@
                     </div>
                 </div>
 
-                <!-- Secondary Flipped Card (For Railroad Switch Pairs) -->
+                <!-- Secondary Flipped Card (For Double Railway Switch Pairs) -->
                 <div class="card-card secondary-card hidden" id="secondaryCardDisplay">
                     <div class="card-inner">
                         <div class="card-type-banner" id="secondaryCardTypeLabel">NEXT CARD</div>
@@ -112,8 +133,8 @@
 
         <!-- Footer -->
         <footer class="app-footer">
-            <p>Next Station: Berlin Deck Companion • Base Game Rules</p>
-            <p class="rules-note">Deck: 5 Underground (Pink Frame) + 6 Street (Blue Frame) = 11 total cards. Round ends immediately after the 5th Underground card is drawn.</p>
+            <p>Next Station: Berlin Companion • Official UK Rules</p>
+            <p class="rules-note">Deck: 5 Bear (Orange) + 5 Crown (Purple) + 1 Double Railway Switch = 11 total cards. Round ends on the 5th Bear or 5th Crown card.</p>
         </footer>
     </div>
 

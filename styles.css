@@ -13,32 +13,33 @@
 
     /* Line Colors */
     --line-pink: #e6007e;
-    --line-blue: #0099db;
     --line-green: #00964e;
-    --line-yellow: #f5a623;
+    --line-brown: #8b5cf6;
+    --line-blue: #0099db;
 
-    /* Card Frame & Theme Colors */
-    --underground-border: #d81b60;
-    --underground-bg: linear-gradient(180deg, #fff0f6 0%, #ffffff 100%);
-    --underground-header-bg: #d81b60;
-    --underground-header-text: #ffffff;
-    --underground-symbol-color: #c2185b;
+    /* Bear Cards (Orange) */
+    --bear-border: #ea580c;
+    --bear-bg: linear-gradient(180deg, #fff7ed 0%, #ffffff 100%);
+    --bear-header-bg: #ea580c;
+    --bear-header-text: #ffffff;
+    --bear-symbol-color: #c2410c;
 
-    --street-border: #0284c7;
-    --street-bg: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
-    --street-header-bg: #0284c7;
-    --street-header-text: #ffffff;
-    --street-symbol-color: #0369a1;
+    /* Crown Cards (Purple) */
+    --crown-border: #9333ea;
+    --crown-bg: linear-gradient(180deg, #faf5ff 0%, #ffffff 100%);
+    --crown-header-bg: #9333ea;
+    --crown-header-text: #ffffff;
+    --crown-symbol-color: #7e22ce;
 
-    --switch-border: #d97706;
-    --switch-bg: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
-    --switch-header-bg: #d97706;
+    /* Switch Cards (Gold/Yellow) */
+    --switch-border: #ca8a04;
+    --switch-bg: linear-gradient(180deg, #fefce8 0%, #ffffff 100%);
+    --switch-header-bg: #ca8a04;
     --switch-header-text: #ffffff;
-    --switch-symbol-color: #b45309;
+    --switch-symbol-color: #a16207;
 
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.12), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
     --shadow-card: 0 12px 24px -4px rgba(15, 23, 42, 0.15);
 }
 
@@ -78,10 +79,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
 }
 
-.berlin-bear-icon {
+.side-icon {
     font-size: 1.8rem;
 }
 
@@ -108,7 +109,7 @@ body {
     padding: 0.9rem 1.25rem;
     border-radius: 16px;
     box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
     transition: border-color 0.3s;
 }
 
@@ -153,61 +154,92 @@ body {
     flex-shrink: 0;
 }
 
-/* Tracker Panel */
+/* Tracker Panel - Dual Bear vs Crown */
 .tracker-panel {
     background-color: var(--card-bg);
-    padding: 1rem 1.25rem;
+    padding: 1.1rem 1.25rem;
     border-radius: 16px;
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.tracker-subtitle {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.tracker-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
 
 .tracker-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.75rem;
 }
 
 .tracker-title {
     font-size: 0.85rem;
     font-weight: 800;
-    color: var(--underground-border);
     text-transform: uppercase;
     letter-spacing: 0.03em;
 }
 
+.bear-title { color: var(--bear-border); }
+.crown-title { color: var(--crown-border); }
+
 .tracker-count {
     font-size: 0.95rem;
     font-weight: 900;
-    color: var(--underground-border);
 }
+
+.bear-count { color: var(--bear-border); }
+.crown-count { color: var(--crown-border); }
 
 .tracker-slots {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 0.6rem;
+    gap: 0.5rem;
 }
 
 .slot {
-    height: 42px;
-    border-radius: 12px;
+    height: 38px;
+    border-radius: 10px;
     background-color: #f1f5f9;
     border: 2px dashed #cbd5e1;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: #94a3b8;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.slot.active {
-    background-color: #d81b60;
-    border: 2px solid #ad1457;
+/* Active Bear Slot */
+.slot-bear.active {
+    background-color: var(--bear-border);
+    border: 2px solid #c2410c;
     color: #ffffff;
-    box-shadow: 0 4px 10px rgba(216, 27, 96, 0.35);
+    box-shadow: 0 4px 10px rgba(234, 88, 12, 0.35);
+    transform: translateY(-2px) scale(1.04);
+}
+
+/* Active Crown Slot */
+.slot-crown.active {
+    background-color: var(--crown-border);
+    border: 2px solid #7e22ce;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(147, 51, 234, 0.35);
     transform: translateY(-2px) scale(1.04);
 }
 
@@ -237,7 +269,7 @@ body {
     perspective: 1000px;
 }
 
-/* Card Styling - Standard playing card proportions */
+/* Card Styling */
 .card-card {
     background: var(--card-bg);
     width: 100%;
@@ -271,22 +303,22 @@ body {
 }
 
 /* Card Framing Themes */
-.card-card.card-underground {
-    background: var(--underground-bg);
-    border-color: var(--underground-border);
-    box-shadow: 0 12px 28px -4px rgba(216, 27, 96, 0.3);
+.card-card.card-bear {
+    background: var(--bear-bg);
+    border-color: var(--bear-border);
+    box-shadow: 0 12px 28px -4px rgba(234, 88, 12, 0.3);
 }
 
-.card-card.card-street {
-    background: var(--street-bg);
-    border-color: var(--street-border);
-    box-shadow: 0 12px 28px -4px rgba(2, 132, 199, 0.3);
+.card-card.card-crown {
+    background: var(--crown-bg);
+    border-color: var(--crown-border);
+    box-shadow: 0 12px 28px -4px rgba(147, 51, 234, 0.3);
 }
 
 .card-card.card-switch {
     background: var(--switch-bg);
     border-color: var(--switch-border);
-    box-shadow: 0 12px 28px -4px rgba(217, 119, 6, 0.35);
+    box-shadow: 0 12px 28px -4px rgba(202, 138, 4, 0.35);
 }
 
 .card-inner {
@@ -313,14 +345,14 @@ body {
     max-width: 260px;
 }
 
-.card-underground .card-type-banner {
-    background-color: var(--underground-header-bg);
-    color: var(--underground-header-text);
+.card-bear .card-type-banner {
+    background-color: var(--bear-header-bg);
+    color: var(--bear-header-text);
 }
 
-.card-street .card-type-banner {
-    background-color: var(--street-header-bg);
-    color: var(--street-header-text);
+.card-crown .card-type-banner {
+    background-color: var(--crown-header-bg);
+    color: var(--crown-header-text);
 }
 
 .card-switch .card-type-banner {
@@ -387,9 +419,9 @@ body {
 }
 
 .alert-banner.banner-info {
-    background-color: #fffbeb;
-    border: 2px solid #f5a623;
-    color: #92400e;
+    background-color: #fefce8;
+    border: 2px solid #ca8a04;
+    color: #854d0e;
 }
 
 .alert-banner.banner-success {
@@ -527,14 +559,14 @@ kbd {
     position: relative;
 }
 
-.mini-card.mini-underground {
-    background: var(--underground-bg);
-    border-color: var(--underground-border);
+.mini-card.mini-bear {
+    background: var(--bear-bg);
+    border-color: var(--bear-border);
 }
 
-.mini-card.mini-street {
-    background: var(--street-bg);
-    border-color: var(--street-border);
+.mini-card.mini-crown {
+    background: var(--crown-bg);
+    border-color: var(--crown-border);
 }
 
 .mini-card.mini-switch {
@@ -628,22 +660,22 @@ kbd {
     border: 1px solid transparent;
 }
 
-.summary-card-pill.pill-underground {
-    background-color: #fff0f6;
-    border-color: var(--underground-border);
-    color: #9e0059;
+.summary-card-pill.pill-bear {
+    background-color: #fff7ed;
+    border-color: var(--bear-border);
+    color: var(--bear-symbol-color);
 }
 
-.summary-card-pill.pill-street {
-    background-color: #f0f9ff;
-    border-color: var(--street-border);
-    color: #006699;
+.summary-card-pill.pill-crown {
+    background-color: #faf5ff;
+    border-color: var(--crown-border);
+    color: var(--crown-symbol-color);
 }
 
 .summary-card-pill.pill-switch {
-    background-color: #fffbeb;
+    background-color: #fefce8;
     border-color: var(--switch-border);
-    color: #b45309;
+    color: var(--switch-symbol-color);
 }
 
 /* Utilities */

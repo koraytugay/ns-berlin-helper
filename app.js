@@ -1,32 +1,33 @@
 /**
  * Next Station: Berlin - Deck Companion
- * Base Game Destination Deck Helper
+ * Official UK Rules Deck Companion
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Line Color definitions
+    // Line Color definitions for the 4 rounds
     const COLORS = [
         { name: 'Pink Line', color: '#e6007e' },
-        { name: 'Blue Line', color: '#0099db' },
         { name: 'Green Line', color: '#00964e' },
-        { name: 'Yellow Line', color: '#f5a623' }
+        { name: 'Brown Line', color: '#8b5cf6' },
+        { name: 'Blue Line', color: '#0099db' }
     ];
 
-    // Card definitions
-    // 5 Underground (Pink frame) + 6 Street (Blue frame) = 11 cards total
+    // Card definitions for Next Station: Berlin
+    // 5 Bear Cards (Orange) + 5 Crown Cards (Purple) + 1 Double Railway Switch = 11 cards total
     const BASE_DECK = [
-        { id: 'u_circle', type: 'underground', symbol: 'circle', name: 'Circle Station' },
-        { id: 'u_square', type: 'underground', symbol: 'square', name: 'Square Station' },
-        { id: 'u_triangle', type: 'underground', symbol: 'triangle', name: 'Triangle Station' },
-        { id: 'u_pentagon', type: 'underground', symbol: 'pentagon', name: 'Pentagon Station' },
-        { id: 'u_wild', type: 'underground', symbol: 'wild', name: 'Wild Station (Joker)' },
+        { id: 'b_circle', type: 'bear', symbol: 'circle', name: 'Bear • Circle Station 🐻' },
+        { id: 'b_square', type: 'bear', symbol: 'square', name: 'Bear • Square Station 🐻' },
+        { id: 'b_triangle', type: 'bear', symbol: 'triangle', name: 'Bear • Triangle Station 🐻' },
+        { id: 'b_pentagon', type: 'bear', symbol: 'pentagon', name: 'Bear • Pentagon Station 🐻' },
+        { id: 'b_wild', type: 'bear', symbol: 'wild', name: 'Bear • Wild Station (Joker) 🐻' },
 
-        { id: 's_circle', type: 'street', symbol: 'circle', name: 'Circle Station' },
-        { id: 's_square', type: 'street', symbol: 'square', name: 'Square Station' },
-        { id: 's_triangle', type: 'street', symbol: 'triangle', name: 'Triangle Station' },
-        { id: 's_pentagon', type: 'street', symbol: 'pentagon', name: 'Pentagon Station' },
-        { id: 's_wild', type: 'street', symbol: 'wild', name: 'Wild Station (Joker)' },
-        { id: 's_switch', type: 'street', symbol: 'switch', name: 'Railroad Switch' }
+        { id: 'c_circle', type: 'crown', symbol: 'circle', name: 'Crown • Circle Station 👑' },
+        { id: 'c_square', type: 'crown', symbol: 'square', name: 'Crown • Square Station 👑' },
+        { id: 'c_triangle', type: 'crown', symbol: 'triangle', name: 'Crown • Triangle Station 👑' },
+        { id: 'c_pentagon', type: 'crown', symbol: 'pentagon', name: 'Crown • Pentagon Station 👑' },
+        { id: 'c_wild', type: 'crown', symbol: 'wild', name: 'Crown • Wild Station (Joker) 👑' },
+
+        { id: 'switch', type: 'switch', symbol: 'switch', name: 'Double Railway Switch ⇄' }
     ];
 
     // App State
@@ -34,7 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentRoundIndex = 0; // 0 to 3
     let deck = [];
     let revealedCards = [];
-    let undergroundCount = 0;
+    let bearCount = 0;
+    let crownCount = 0;
     let isRoundOver = false;
     let isGameOver = false;
     let completedRoundsData = [];
@@ -45,7 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const lineBadgeEl = document.getElementById('lineBadge');
     const lineDotEl = document.getElementById('lineDot');
     const lineNameEl = document.getElementById('lineName');
-    const trackerCountEl = document.getElementById('trackerCount');
+
+    const bearCountEl = document.getElementById('bearCount');
+    const crownCountEl = document.getElementById('crownCount');
 
     const cardDisplayEl = document.getElementById('cardDisplay');
     const cardTypeLabelEl = document.getElementById('cardTypeLabel');
@@ -131,7 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentRoundIndex = roundIdx;
         deck = shuffle(BASE_DECK);
         revealedCards = [];
-        undergroundCount = 0;
+        bearCount = 0;
+        crownCount = 0;
         isRoundOver = false;
 
         const currentLine = roundColorsSequence[currentRoundIndex];
@@ -142,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lineNameEl.textContent = currentLine.name;
         statusPanelEl.style.borderColor = currentLine.color;
 
-        // Reset Tracker
+        // Reset Trackers
         updateTrackerUI();
 
         // Reset Main Card Display
@@ -178,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (deck.length === 0) {
-            endCurrentRound();
+            finishRoundAndAdvance();
             return;
         }
 
@@ -195,18 +200,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderCard(card, cardDisplayEl, cardTypeLabelEl, cardSymbolContainerEl, cardNameLabelEl);
 
-        // Check if Underground card
-        if (card.type === 'underground') {
-            undergroundCount++;
+        // Update Bear / Crown counts
+        if (card.type === 'bear') {
+            bearCount++;
+            updateTrackerUI();
+        } else if (card.type === 'crown') {
+            crownCount++;
             updateTrackerUI();
         }
 
         // Add to history UI
         addCardToHistory(card, revealedCards.length);
 
-        // Handle Switch Card Logic
+        // Handle Double Railway Switch Logic
         if (card.symbol === 'switch') {
-            showAlert('banner-info', '⇄ RAILROAD SWITCH! Branch from any station on your line. Drawing destination symbol...');
+            showAlert('banner-info', '⇄ DOUBLE RAILWAY SWITCH! Create a switch on both lines. Drawing destination card...');
             
             // Draw the next card immediately to pair with the switch card!
             if (deck.length > 0) {
@@ -221,8 +229,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     renderCard(nextCard, secondaryCardDisplayEl, secondaryCardTypeLabelEl, secondaryCardSymbolContainerEl, secondaryCardNameLabelEl);
 
-                    if (nextCard.type === 'underground') {
-                        undergroundCount++;
+                    if (nextCard.type === 'bear') {
+                        bearCount++;
+                        updateTrackerUI();
+                    } else if (nextCard.type === 'crown') {
+                        crownCount++;
                         updateTrackerUI();
                     }
 
@@ -242,26 +253,28 @@ document.addEventListener('DOMContentLoaded', () => {
         containerEl.className = 'card-card';
         if (card.symbol === 'switch') {
             containerEl.classList.add('card-switch');
-            typeLabelEl.textContent = 'RAILROAD SWITCH';
-        } else if (card.type === 'underground') {
-            containerEl.classList.add('card-underground');
-            typeLabelEl.textContent = 'UNDERGROUND (PINK FRAME)';
-        } else {
-            containerEl.classList.add('card-street');
-            typeLabelEl.textContent = 'STREET (BLUE FRAME)';
+            typeLabelEl.textContent = 'DOUBLE RAILWAY SWITCH';
+        } else if (card.type === 'bear') {
+            containerEl.classList.add('card-bear');
+            typeLabelEl.textContent = 'BEAR CARD (ORANGE) 🐻';
+        } else if (card.type === 'crown') {
+            containerEl.classList.add('card-crown');
+            typeLabelEl.textContent = 'CROWN CARD (PURPLE) 👑';
         }
 
-        const symbolColor = card.symbol === 'switch' ? '#b45309' : (card.type === 'underground' ? '#c2185b' : '#0369a1');
+        const symbolColor = card.symbol === 'switch' ? '#a16207' : (card.type === 'bear' ? '#c2410c' : '#7e22ce');
         symbolContainerEl.innerHTML = getSymbolSvg(card.symbol, symbolColor);
         nameLabelEl.textContent = card.name;
     }
 
-    // Check if 5th underground card was revealed
+    // Check if 5th Bear or 5th Crown card was revealed
     function checkRoundEndState() {
-        if (undergroundCount >= 5) {
+        if (bearCount >= 5 || crownCount >= 5) {
             isRoundOver = true;
             const currentLine = roundColorsSequence[currentRoundIndex];
-            showAlert('banner-warning', `⚠️ 5th Underground card drawn! Round ${currentRoundIndex + 1} (${currentLine.name}) is OVER after this turn.`);
+            const cause = bearCount >= 5 ? '5th Bear card (Orange 🐻)' : '5th Crown card (Purple 👑)';
+            
+            showAlert('banner-warning', `⚠️ ${cause} drawn! Round ${currentRoundIndex + 1} (${currentLine.name}) is OVER after this turn.`);
 
             if (currentRoundIndex === 3) {
                 primaryBtn.textContent = 'End Game';
@@ -271,15 +284,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Update 1-5 tracker slots
+    // Update 1-5 Bear and Crown tracker slots
     function updateTrackerUI() {
-        trackerCountEl.textContent = `${undergroundCount} / 5`;
+        bearCountEl.textContent = `${bearCount} / 5`;
+        crownCountEl.textContent = `${crownCount} / 5`;
+
         for (let i = 1; i <= 5; i++) {
-            const slotEl = document.getElementById(`slot-${i}`);
-            if (i <= undergroundCount) {
-                slotEl.classList.add('active');
+            const bearSlot = document.getElementById(`bear-slot-${i}`);
+            const crownSlot = document.getElementById(`crown-slot-${i}`);
+
+            if (i <= bearCount) {
+                bearSlot.classList.add('active');
             } else {
-                slotEl.classList.remove('active');
+                bearSlot.classList.remove('active');
+            }
+
+            if (i <= crownCount) {
+                crownSlot.classList.add('active');
+            } else {
+                crownSlot.classList.remove('active');
             }
         }
     }
@@ -293,13 +316,15 @@ document.addEventListener('DOMContentLoaded', () => {
         cardsDrawnCountEl.textContent = revealedCards.length;
 
         const mini = document.createElement('div');
-        mini.className = `mini-card mini-${card.symbol === 'switch' ? 'switch' : card.type}`;
+        mini.className = `mini-card mini-${card.type}`;
 
-        const iconColor = card.symbol === 'switch' ? '#b45309' : (card.type === 'underground' ? '#c2185b' : '#0369a1');
+        const iconColor = card.symbol === 'switch' ? '#a16207' : (card.type === 'bear' ? '#c2410c' : '#7e22ce');
+        const badgeIcon = card.type === 'bear' ? '🐻' : (card.type === 'crown' ? '👑' : '⇄');
+
         mini.innerHTML = `
             <span class="mini-card-badge">#${turnIndex}</span>
             <div class="mini-card-icon">${getSymbolSvg(card.symbol, iconColor)}</div>
-            <div class="mini-card-label">${card.symbol}</div>
+            <div class="mini-card-label">${card.symbol} ${badgeIcon}</div>
         `;
 
         historyCardsEl.appendChild(mini);
@@ -313,7 +338,8 @@ document.addEventListener('DOMContentLoaded', () => {
         completedRoundsData.push({
             roundNum: currentRoundIndex + 1,
             line: currentLine,
-            cards: [...revealedCards]
+            cards: [...revealedCards],
+            endedBy: bearCount >= 5 ? 'Bear (5)' : 'Crown (5)'
         });
 
         renderCompletedRoundsSummary();
@@ -321,13 +347,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentRoundIndex >= 3) {
             // All 4 rounds finished!
             isGameOver = true;
-            cardDisplayEl.className = 'card-card card-underground';
+            cardDisplayEl.className = 'card-card card-bear';
             cardTypeLabelEl.textContent = 'GAME OVER';
-            cardSymbolContainerEl.innerHTML = `<div class="card-symbol-svg" style="font-size: 5rem; display: flex; justify-content: center; align-items: center;">🎉</div>`;
-            cardNameLabelEl.textContent = 'All 4 Lines Completed!';
+            cardSymbolContainerEl.innerHTML = `<div class="card-symbol-svg" style="font-size: 4.5rem; display: flex; justify-content: center; align-items: center;">🎉</div>`;
+            cardNameLabelEl.textContent = 'All 4 Metro Lines Completed!';
             secondaryCardDisplayEl.classList.add('hidden');
 
-            showAlert('banner-success', '🎉 Game Completed! Tally your final scores on your paper sheets.');
+            showAlert('banner-success', '🎉 Game Completed! Calculate your final score on your Berlin score sheet.');
             primaryBtn.textContent = 'Play Again';
         } else {
             startRound(currentRoundIndex + 1);
@@ -344,13 +370,14 @@ document.addEventListener('DOMContentLoaded', () => {
             row.className = 'round-summary-row';
 
             const pillsHtml = roundData.cards.map(c => {
-                const pillClass = c.symbol === 'switch' ? 'pill-switch' : (c.type === 'underground' ? 'pill-underground' : 'pill-street');
-                return `<span class="summary-card-pill ${pillClass}">${c.symbol.toUpperCase()}</span>`;
+                const pillClass = `pill-${c.type}`;
+                const icon = c.type === 'bear' ? '🐻' : (c.type === 'crown' ? '👑' : '⇄');
+                return `<span class="summary-card-pill ${pillClass}">${c.symbol.toUpperCase()} ${icon}</span>`;
             }).join('');
 
             row.innerHTML = `
                 <div class="round-summary-header">
-                    <span>Round ${roundData.roundNum}: <strong style="color: ${roundData.line.color}">${roundData.line.name}</strong></span>
+                    <span>Round ${roundData.roundNum}: <strong style="color: ${roundData.line.color}">${roundData.line.name}</strong> (${roundData.endedBy})</span>
                     <span>${roundData.cards.length} Cards</span>
                 </div>
                 <div class="round-summary-cards">${pillsHtml}</div>
