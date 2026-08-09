@@ -64,8 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const alertBannerEl = document.getElementById('alertBanner');
     const primaryBtn = document.getElementById('primaryBtn');
 
-    const historyCardsEl = document.getElementById('historyCards');
-    const cardsDrawnCountEl = document.getElementById('cardsDrawnCount');
     const completedRoundsPanelEl = document.getElementById('completedRoundsPanel');
     const completedRoundsContainerEl = document.getElementById('completedRoundsContainer');
 
@@ -163,10 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Reset Buttons
         primaryBtn.textContent = 'Flip Card';
         primaryBtn.classList.remove('hidden');
-
-        // Reset History
-        historyCardsEl.innerHTML = '<span class="empty-history">No cards revealed yet in this round.</span>';
-        cardsDrawnCountEl.textContent = '0';
     }
 
     // Flip Card Logic
@@ -208,9 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateTrackerUI();
         }
 
-        // Add to history UI
-        addCardToHistory(card, revealedCards.length);
-
         // Handle Double Railway Switch Logic
         if (card.symbol === 'switch') {
             showAlert('banner-info', '⇄ DOUBLE RAILWAY SWITCH! Create a switch on both lines. Drawing destination card...');
@@ -235,8 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         crownCardsRevealed.push(nextCard);
                         updateTrackerUI();
                     }
-
-                    addCardToHistory(nextCard, revealedCards.length);
 
                     checkRoundEndState();
                 }, 400);
@@ -315,30 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 crownSlot.innerHTML = `<span class="slot-num">${i}</span>`;
             }
         }
-    }
-
-    // Add card to current round history strip
-    function addCardToHistory(card, turnIndex) {
-        if (historyCardsEl.querySelector('.empty-history')) {
-            historyCardsEl.innerHTML = '';
-        }
-
-        cardsDrawnCountEl.textContent = revealedCards.length;
-
-        const mini = document.createElement('div');
-        mini.className = `mini-card mini-${card.type}`;
-
-        const iconColor = card.symbol === 'switch' ? '#a16207' : (card.type === 'bear' ? '#c2410c' : '#7e22ce');
-        const badgeIcon = card.type === 'bear' ? '🐻' : (card.type === 'crown' ? '👑' : '⇄');
-
-        mini.innerHTML = `
-            <span class="mini-card-badge">#${turnIndex}</span>
-            <div class="mini-card-icon">${getSymbolSvg(card.symbol, iconColor)}</div>
-            <div class="mini-card-label">${card.symbol} ${badgeIcon}</div>
-        `;
-
-        historyCardsEl.appendChild(mini);
-        historyCardsEl.scrollLeft = historyCardsEl.scrollWidth;
     }
 
     // Advance to next round or end game

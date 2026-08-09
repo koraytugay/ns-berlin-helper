@@ -17,124 +17,110 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
+        <!-- Compact Header -->
         <header class="app-header">
             <div class="logo-row">
                 <span class="side-icon bear-side">🐻</span>
                 <h1>Next Station: Berlin</h1>
                 <span class="side-icon crown-side">👑</span>
             </div>
-            <p class="subtitle">Base Game Destination Deck Companion</p>
         </header>
 
-        <!-- Status Panel: Round & Line -->
-        <section class="status-panel" id="statusPanel">
-            <div class="round-badge">
-                <span class="badge-label">ROUND</span>
-                <span class="badge-value" id="roundNumber">1 / 4</span>
-            </div>
-
-            <div class="line-badge" id="lineBadge">
-                <span class="line-dot" id="lineDot"></span>
-                <span class="line-name" id="lineName">Pink Line</span>
-            </div>
-        </section>
-
-        <!-- Dual Tracker Panel: Bear vs Crown -->
-        <section class="tracker-panel">
-            <div class="tracker-subtitle">Round ends when either Bear 🐻 or Crown 👑 reaches 5!</div>
-            
-            <!-- Bear Tracker (Orange) -->
-            <div class="tracker-group bear-group">
-                <div class="tracker-header">
-                    <span class="tracker-title bear-title">🐻 Bear Cards (Orange)</span>
-                    <span class="tracker-count bear-count" id="bearCount">0 / 5</span>
-                </div>
-                <div class="tracker-slots" id="bearSlots">
-                    <div class="slot slot-bear" id="bear-slot-1"><span class="slot-num">1</span></div>
-                    <div class="slot slot-bear" id="bear-slot-2"><span class="slot-num">2</span></div>
-                    <div class="slot slot-bear" id="bear-slot-3"><span class="slot-num">3</span></div>
-                    <div class="slot slot-bear" id="bear-slot-4"><span class="slot-num">4</span></div>
-                    <div class="slot slot-bear" id="bear-slot-5"><span class="slot-num">5</span></div>
-                </div>
-            </div>
-
-            <!-- Crown Tracker (Purple) -->
-            <div class="tracker-group crown-group">
-                <div class="tracker-header">
-                    <span class="tracker-title crown-title">👑 Crown Cards (Purple)</span>
-                    <span class="tracker-count crown-count" id="crownCount">0 / 5</span>
-                </div>
-                <div class="tracker-slots" id="crownSlots">
-                    <div class="slot slot-crown" id="crown-slot-1"><span class="slot-num">1</span></div>
-                    <div class="slot slot-crown" id="crown-slot-2"><span class="slot-num">2</span></div>
-                    <div class="slot slot-crown" id="crown-slot-3"><span class="slot-num">3</span></div>
-                    <div class="slot slot-crown" id="crown-slot-4"><span class="slot-num">4</span></div>
-                    <div class="slot slot-crown" id="crown-slot-5"><span class="slot-num">5</span></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Main Card Display Section -->
-        <main class="card-section">
-            <div class="card-display-wrapper" id="cardDisplayWrapper">
-                <!-- Main Flipped Card -->
-                <div class="card-card" id="cardDisplay">
-                    <div class="card-inner">
-                        <div class="card-type-banner" id="cardTypeLabel">START GAME</div>
-                        <div class="card-symbol-box">
-                            <div class="card-symbol-container" id="cardSymbolContainer">
-                                <div class="placeholder-icon">🎴</div>
+        <!-- Main 2-Column Grid (Everything visible at once) -->
+        <div class="main-grid">
+            <!-- Left Column: Active Card Display -->
+            <div class="left-col">
+                <div class="card-display-wrapper" id="cardDisplayWrapper">
+                    <!-- Main Flipped Card -->
+                    <div class="card-card" id="cardDisplay">
+                        <div class="card-inner">
+                            <div class="card-type-banner" id="cardTypeLabel">START GAME</div>
+                            <div class="card-symbol-box">
+                                <div class="card-symbol-container" id="cardSymbolContainer">
+                                    <div class="placeholder-icon">🎴</div>
+                                </div>
                             </div>
+                            <div class="card-footer-name" id="cardNameLabel">Press Flip Card</div>
                         </div>
-                        <div class="card-footer-name" id="cardNameLabel">Press Flip Card</div>
+                    </div>
+
+                    <!-- Secondary Flipped Card (For Double Railway Switch Pairs) -->
+                    <div class="card-card secondary-card hidden" id="secondaryCardDisplay">
+                        <div class="card-inner">
+                            <div class="card-type-banner" id="secondaryCardTypeLabel">NEXT CARD</div>
+                            <div class="card-symbol-box">
+                                <div class="card-symbol-container" id="secondaryCardSymbolContainer"></div>
+                            </div>
+                            <div class="card-footer-name" id="secondaryCardNameLabel"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Compact Status, Trackers & Flip Button -->
+            <div class="right-col">
+                <!-- Compact Status Panel -->
+                <div class="status-panel-compact" id="statusPanel">
+                    <div class="compact-badge round-badge">
+                        <span class="badge-label">ROUND</span>
+                        <span class="badge-value" id="roundNumber">1 / 4</span>
+                    </div>
+
+                    <div class="compact-badge line-badge" id="lineBadge">
+                        <span class="line-dot" id="lineDot"></span>
+                        <span class="line-name" id="lineName">Pink Line</span>
                     </div>
                 </div>
 
-                <!-- Secondary Flipped Card (For Double Railway Switch Pairs) -->
-                <div class="card-card secondary-card hidden" id="secondaryCardDisplay">
-                    <div class="card-inner">
-                        <div class="card-type-banner" id="secondaryCardTypeLabel">NEXT CARD</div>
-                        <div class="card-symbol-box">
-                            <div class="card-symbol-container" id="secondaryCardSymbolContainer"></div>
+                <!-- Dual Tracker Panel (Bear vs Crown) -->
+                <div class="tracker-panel">
+                    <!-- Bear Tracker (Orange) -->
+                    <div class="tracker-group bear-group">
+                        <div class="tracker-header">
+                            <span class="tracker-title bear-title">🐻 Bear Cards (Orange)</span>
+                            <span class="tracker-count bear-count" id="bearCount">0 / 5</span>
                         </div>
-                        <div class="card-footer-name" id="secondaryCardNameLabel"></div>
+                        <div class="tracker-slots" id="bearSlots">
+                            <div class="slot slot-bear" id="bear-slot-1"><span class="slot-num">1</span></div>
+                            <div class="slot slot-bear" id="bear-slot-2"><span class="slot-num">2</span></div>
+                            <div class="slot slot-bear" id="bear-slot-3"><span class="slot-num">3</span></div>
+                            <div class="slot slot-bear" id="bear-slot-4"><span class="slot-num">4</span></div>
+                            <div class="slot slot-bear" id="bear-slot-5"><span class="slot-num">5</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Crown Tracker (Purple) -->
+                    <div class="tracker-group crown-group">
+                        <div class="tracker-header">
+                            <span class="tracker-title crown-title">👑 Crown Cards (Purple)</span>
+                            <span class="tracker-count crown-count" id="crownCount">0 / 5</span>
+                        </div>
+                        <div class="tracker-slots" id="crownSlots">
+                            <div class="slot slot-crown" id="crown-slot-1"><span class="slot-num">1</span></div>
+                            <div class="slot slot-crown" id="crown-slot-2"><span class="slot-num">2</span></div>
+                            <div class="slot slot-crown" id="crown-slot-3"><span class="slot-num">3</span></div>
+                            <div class="slot slot-crown" id="crown-slot-4"><span class="slot-num">4</span></div>
+                            <div class="slot slot-crown" id="crown-slot-5"><span class="slot-num">5</span></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Banner Alerts -->
-            <div class="alert-banner hidden" id="alertBanner"></div>
+                <!-- Banner Alerts -->
+                <div class="alert-banner hidden" id="alertBanner"></div>
 
-            <!-- Controls -->
-            <div class="controls-container">
-                <button id="primaryBtn" class="btn btn-primary">Flip Card</button>
+                <!-- Controls -->
+                <div class="controls-container">
+                    <button id="primaryBtn" class="btn btn-primary">Flip Card</button>
+                </div>
+                <p class="keyboard-hint">Press <kbd>Space</kbd> or <kbd>Enter</kbd> to flip</p>
             </div>
-            <p class="keyboard-hint">Press <kbd>Space</kbd> or <kbd>Enter</kbd> to flip card</p>
-        </main>
-
-        <!-- Current Round History -->
-        <section class="history-panel">
-            <div class="history-header">
-                <h3>Cards Revealed This Round</h3>
-                <span class="history-count"><span id="cardsDrawnCount">0</span>/11</span>
-            </div>
-            <div class="history-cards" id="historyCards">
-                <span class="empty-history">No cards revealed yet in this round.</span>
-            </div>
-        </section>
+        </div>
 
         <!-- Completed Rounds Summary -->
         <section class="completed-rounds-panel hidden" id="completedRoundsPanel">
             <h3>Completed Rounds Summary</h3>
             <div class="completed-rounds-container" id="completedRoundsContainer"></div>
         </section>
-
-        <!-- Footer -->
-        <footer class="app-footer">
-            <p>Next Station: Berlin Companion • Official UK Rules</p>
-            <p class="rules-note">Deck: 5 Bear (Orange) + 5 Crown (Purple) + 1 Double Railway Switch = 11 total cards. Round ends on the 5th Bear or 5th Crown card.</p>
-        </footer>
     </div>
 
     <script src="app.js"></script>
