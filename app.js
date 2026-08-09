@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const COLORS = [
         { name: 'Pink Line', color: '#e6007e' },
         { name: 'Green Line', color: '#00964e' },
-        { name: 'Brown Line', color: '#8b5cf6' },
+        { name: 'Brown Line', color: '#8b4513' },
         { name: 'Blue Line', color: '#0099db' }
     ];
 
