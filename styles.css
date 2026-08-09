@@ -219,6 +219,12 @@ body {
     margin: 0.4rem 0;
 }
 
+.card-card.is-wild .card-symbol-box {
+    background-color: #fef08a;
+    border: 3px solid #eab308;
+    box-shadow: 0 6px 14px rgba(234, 179, 8, 0.35), inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
 .card-symbol-container {
     display: flex;
     justify-content: center;

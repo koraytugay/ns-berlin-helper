@@ -88,7 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 </svg>`;
             case 'wild':
                 return `<svg viewBox="0 0 100 100" class="${className}" style="color: ${color}">
-                    <polygon points="50,5 64,36 98,36 70,57 81,91 50,70 19,91 30,57 2,36 36,36" fill="currentColor" />
+                    <!-- 2x2 Layout indicating 'Connect to any station' -->
+                    <circle cx="27" cy="27" r="17" fill="currentColor" />
+                    <rect x="56" y="10" width="34" height="34" rx="6" fill="currentColor" />
+                    <polygon points="27,56 44,89 10,89" fill="currentColor" />
+                    <polygon points="73,56 91,69 84,90 62,90 55,69" fill="currentColor" />
                 </svg>`;
             case 'switch':
                 return `<svg viewBox="0 0 100 100" class="${className}" style="color: ${color}">
@@ -239,18 +243,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Render single card details to DOM elements
     function renderCard(card, containerEl, typeLabelEl, symbolContainerEl, nameLabelEl) {
         containerEl.className = 'card-card';
+        if (card.symbol === 'wild') {
+            containerEl.classList.add('is-wild');
+        }
         if (card.symbol === 'switch') {
             containerEl.classList.add('card-switch');
             typeLabelEl.textContent = 'DOUBLE RAILWAY SWITCH';
         } else if (card.type === 'bear') {
             containerEl.classList.add('card-bear');
-            typeLabelEl.textContent = 'BEAR CARD (ORANGE) 🐻';
+            typeLabelEl.textContent = card.symbol === 'wild' ? 'BEAR CARD (ORANGE) 🐻 • WILD' : 'BEAR CARD (ORANGE) 🐻';
         } else if (card.type === 'crown') {
             containerEl.classList.add('card-crown');
-            typeLabelEl.textContent = 'CROWN CARD (PURPLE) 👑';
+            typeLabelEl.textContent = card.symbol === 'wild' ? 'CROWN CARD (PURPLE) 👑 • WILD' : 'CROWN CARD (PURPLE) 👑';
         }
 
-        const symbolColor = card.symbol === 'switch' ? '#a16207' : (card.type === 'bear' ? '#c2410c' : '#7e22ce');
+        const symbolColor = card.symbol === 'switch' ? '#a16207' : (card.symbol === 'wild' ? '#a16207' : (card.type === 'bear' ? '#c2410c' : '#7e22ce'));
         symbolContainerEl.innerHTML = getSymbolSvg(card.symbol, symbolColor);
         nameLabelEl.textContent = card.name;
     }
