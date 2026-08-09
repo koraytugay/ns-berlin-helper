@@ -4,7 +4,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Color definitions
+    // Line Color definitions
     const COLORS = [
         { name: 'Pink Line', color: '#e6007e' },
         { name: 'Blue Line', color: '#0099db' },
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // Card definitions
-    // 5 Underground (Pink frame) + 6 Street (Blue frame) = 11 cards
+    // 5 Underground (Pink frame) + 6 Street (Blue frame) = 11 cards total
     const BASE_DECK = [
         { id: 'u_circle', type: 'underground', symbol: 'circle', name: 'Circle Station' },
         { id: 'u_square', type: 'underground', symbol: 'square', name: 'Square Station' },
@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let completedRoundsData = [];
 
     // DOM Elements
+    const statusPanelEl = document.getElementById('statusPanel');
     const roundNumberEl = document.getElementById('roundNumber');
     const lineBadgeEl = document.getElementById('lineBadge');
     const lineDotEl = document.getElementById('lineDot');
@@ -66,39 +67,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const completedRoundsContainerEl = document.getElementById('completedRoundsContainer');
 
     // Utility: SVG Generators for symbols
-    function getSymbolSvg(symbol, color = 'currentColor', size = 120) {
+    function getSymbolSvg(symbol, color = 'currentColor') {
         switch (symbol) {
             case 'circle':
                 return `<svg viewBox="0 0 100 100" class="card-symbol-svg" style="color: ${color}">
-                    <circle cx="50" cy="50" r="40" fill="currentColor" stroke="none" />
+                    <circle cx="50" cy="50" r="40" fill="currentColor" />
                 </svg>`;
             case 'square':
                 return `<svg viewBox="0 0 100 100" class="card-symbol-svg" style="color: ${color}">
-                    <rect x="12" y="12" width="76" height="76" rx="8" fill="currentColor" stroke="none" />
+                    <rect x="12" y="12" width="76" height="76" rx="10" fill="currentColor" />
                 </svg>`;
             case 'triangle':
                 return `<svg viewBox="0 0 100 100" class="card-symbol-svg" style="color: ${color}">
-                    <polygon points="50,10 90,85 10,85" fill="currentColor" stroke="none" />
+                    <polygon points="50,8 92,86 8,86" fill="currentColor" />
                 </svg>`;
             case 'pentagon':
                 return `<svg viewBox="0 0 100 100" class="card-symbol-svg" style="color: ${color}">
-                    <polygon points="50,10 92,40 76,88 24,88 8,40" fill="currentColor" stroke="none" />
+                    <polygon points="50,8 94,39 77,88 23,88 6,39" fill="currentColor" />
                 </svg>`;
             case 'wild':
                 return `<svg viewBox="0 0 100 100" class="card-symbol-svg" style="color: ${color}">
-                    <polygon points="50,5 64,36 98,36 70,57 81,91 50,70 19,91 30,57 2,36 36,36" fill="currentColor" stroke="none" />
+                    <polygon points="50,5 64,36 98,36 70,57 81,91 50,70 19,91 30,57 2,36 36,36" fill="currentColor" />
                 </svg>`;
             case 'switch':
                 return `<svg viewBox="0 0 100 100" class="card-symbol-svg" style="color: ${color}">
-                    <!-- Main line -->
                     <path d="M 15 50 L 85 50" stroke="currentColor" stroke-width="12" stroke-linecap="round"/>
-                    <!-- Branching line up -->
-                    <path d="M 40 50 Q 60 50 80 20" stroke="currentColor" stroke-width="12" fill="none" stroke-linecap="round"/>
-                    <!-- Arrow heads -->
+                    <path d="M 38 50 Q 58 50 78 20" stroke="currentColor" stroke-width="12" fill="none" stroke-linecap="round"/>
                     <polygon points="85,50 70,40 70,60" fill="currentColor" />
-                    <polygon points="80,20 65,15 72,32" fill="currentColor" />
-                    <!-- Circle node at split -->
-                    <circle cx="40" cy="50" r="10" fill="#ffffff" stroke="currentColor" stroke-width="6"/>
+                    <polygon points="78,20 63,15 70,32" fill="currentColor" />
+                    <circle cx="38" cy="50" r="9" fill="#ffffff" stroke="currentColor" stroke-width="6"/>
                 </svg>`;
             default:
                 return '';
@@ -143,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         roundNumberEl.textContent = `${currentRoundIndex + 1} / 4`;
         lineDotEl.style.backgroundColor = currentLine.color;
         lineNameEl.textContent = currentLine.name;
+        statusPanelEl.style.borderColor = currentLine.color;
 
         // Reset Tracker
         updateTrackerUI();
@@ -151,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cardDisplayEl.className = 'card-card';
         cardTypeLabelEl.textContent = `ROUND ${currentRoundIndex + 1}: ${currentLine.name.toUpperCase()}`;
         cardSymbolContainerEl.innerHTML = `<div class="placeholder-icon">🎴</div>`;
-        cardNameLabelEl.textContent = 'Press Flip Card to Start';
+        cardNameLabelEl.textContent = 'Press Flip Card';
 
         secondaryCardDisplayEl.classList.add('hidden');
 
@@ -180,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (deck.length === 0) {
-            // Safety check
             endCurrentRound();
             return;
         }
@@ -205,13 +202,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Add to history UI
-        addCardToHistory(card);
+        addCardToHistory(card, revealedCards.length);
 
         // Handle Switch Card Logic
         if (card.symbol === 'switch') {
-            showAlert('banner-info', '⇄ RAILROAD SWITCH! You can branch from any station on your line. Flipping next card...');
+            showAlert('banner-info', '⇄ RAILROAD SWITCH! Branch from any station on your line. Drawing destination symbol...');
             
-            // Per Next Station rules: Draw the next card immediately to pair with the switch card!
+            // Draw the next card immediately to pair with the switch card!
             if (deck.length > 0) {
                 setTimeout(() => {
                     const nextCard = deck.pop();
@@ -229,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         updateTrackerUI();
                     }
 
-                    addCardToHistory(nextCard);
+                    addCardToHistory(nextCard, revealedCards.length);
 
                     checkRoundEndState();
                 }, 400);
@@ -245,16 +242,16 @@ document.addEventListener('DOMContentLoaded', () => {
         containerEl.className = 'card-card';
         if (card.symbol === 'switch') {
             containerEl.classList.add('card-switch');
-            typeLabelEl.textContent = 'STREET CARD • RAILROAD SWITCH';
+            typeLabelEl.textContent = 'RAILROAD SWITCH';
         } else if (card.type === 'underground') {
             containerEl.classList.add('card-underground');
-            typeLabelEl.textContent = 'UNDERGROUND CARD (PINK FRAME)';
+            typeLabelEl.textContent = 'UNDERGROUND (PINK FRAME)';
         } else {
             containerEl.classList.add('card-street');
-            typeLabelEl.textContent = 'STREET CARD (BLUE FRAME)';
+            typeLabelEl.textContent = 'STREET (BLUE FRAME)';
         }
 
-        const symbolColor = card.symbol === 'switch' ? '#b45309' : (card.type === 'underground' ? '#9e0059' : '#006699');
+        const symbolColor = card.symbol === 'switch' ? '#b45309' : (card.type === 'underground' ? '#c2185b' : '#0369a1');
         symbolContainerEl.innerHTML = getSymbolSvg(card.symbol, symbolColor);
         nameLabelEl.textContent = card.name;
     }
@@ -288,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Add card to current round history strip
-    function addCardToHistory(card) {
+    function addCardToHistory(card, turnIndex) {
         if (historyCardsEl.querySelector('.empty-history')) {
             historyCardsEl.innerHTML = '';
         }
@@ -298,9 +295,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const mini = document.createElement('div');
         mini.className = `mini-card mini-${card.symbol === 'switch' ? 'switch' : card.type}`;
 
-        const iconColor = card.symbol === 'switch' ? '#b45309' : (card.type === 'underground' ? '#9e0059' : '#006699');
+        const iconColor = card.symbol === 'switch' ? '#b45309' : (card.type === 'underground' ? '#c2185b' : '#0369a1');
         mini.innerHTML = `
-            <div class="mini-card-icon">${getSymbolSvg(card.symbol, iconColor, 32)}</div>
+            <span class="mini-card-badge">#${turnIndex}</span>
+            <div class="mini-card-icon">${getSymbolSvg(card.symbol, iconColor)}</div>
             <div class="mini-card-label">${card.symbol}</div>
         `;
 
@@ -325,11 +323,11 @@ document.addEventListener('DOMContentLoaded', () => {
             isGameOver = true;
             cardDisplayEl.className = 'card-card card-underground';
             cardTypeLabelEl.textContent = 'GAME OVER';
-            cardSymbolContainerEl.innerHTML = getSymbolSvg('wild', '#e6007e');
-            cardNameLabelEl.textContent = 'All 4 Metro Lines Completed!';
+            cardSymbolContainerEl.innerHTML = `<div class="card-symbol-svg" style="font-size: 5rem; display: flex; justify-content: center; align-items: center;">🎉</div>`;
+            cardNameLabelEl.textContent = 'All 4 Lines Completed!';
             secondaryCardDisplayEl.classList.add('hidden');
 
-            showAlert('banner-success', '🎉 Game Completed! Compare final scores on your physical sheets.');
+            showAlert('banner-success', '🎉 Game Completed! Tally your final scores on your paper sheets.');
             primaryBtn.textContent = 'Play Again';
         } else {
             startRound(currentRoundIndex + 1);
