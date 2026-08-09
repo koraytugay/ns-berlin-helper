@@ -63,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const alertBannerEl = document.getElementById('alertBanner');
     const primaryBtn = document.getElementById('primaryBtn');
-    const restartBtn = document.getElementById('restartBtn');
 
     const historyCardsEl = document.getElementById('historyCards');
     const cardsDrawnCountEl = document.getElementById('cardsDrawnCount');
@@ -410,7 +409,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event Listeners
     primaryBtn.addEventListener('click', flipCard);
-    restartBtn.addEventListener('click', startNewGame);
 
     document.addEventListener('keyup', (e) => {
         if (e.code === 'Space' || e.code === 'Enter') {

@@ -460,8 +460,8 @@ body {
     background-color: var(--primary-color);
     color: #ffffff;
     box-shadow: 0 10px 20px -3px rgba(37, 99, 235, 0.4);
-    flex: 2;
-    max-width: 300px;
+    width: 100%;
+    max-width: 320px;
 }
 
 .btn-primary:hover {
